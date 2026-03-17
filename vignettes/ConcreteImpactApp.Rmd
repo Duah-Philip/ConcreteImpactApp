@@ -1,0 +1,212 @@
+---
+title: "ConcreteImpactApp: Life Cycle Assessment of SCM Concrete"
+author:
+  - name: "Duah Philip"
+    affiliation: "Mine Sustainability Modeling Research Group, Missouri University of Science and Technology"
+    email: "dpbxc@mst.edu"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+    fig_width: 9
+    fig_height: 7
+vignette: >
+  %\VignetteIndexEntry{ConcreteImpactApp: Life Cycle Assessment of SCM Concrete}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse  = TRUE,
+  comment   = "#>",
+  warning   = FALSE,
+  message   = FALSE,
+  fig.align = "center"
+)
+```
+
+## Overview
+
+`ConcreteImpactApp` is an R package providing an interactive Shiny dashboard
+and a set of data-access functions for evaluating the cradle-to-gate
+life cycle environmental impacts of U.S. ready-mix concrete produced with
+supplementary cementitious materials (SCMs): fly ash (FA) and ground granulated
+blast-furnace slag (GGBFS).
+
+The tool implements the **TRACI 2.2** impact assessment methodology across
+**10 environmental impact categories** and covers:
+
+- **Fly ash**: 16 scenarios (3 treatment technologies × 3 source types × dose levels),
+  with and without avoided-impact credit allocation
+- **Slag (GGBFS)**: 4 global supply-chain origins (USA, Brazil, China, Japan)
+- **6 compressive strength classes**: 17.2, 20.7, 27.6, 34.5, 41.4, 55.2 MPa
+
+---
+
+## Installation
+
+```r
+# Install from the bundled tar.gz (as distributed with the manuscript)
+install.packages("ConcreteImpactApp_1.0.0.tar.gz",
+                 repos = NULL, type = "source")
+
+# Or install development version from GitHub
+# remotes::install_github("Duah-Philip/ConcreteImpactApp")
+```
+
+Dependencies are automatically installed:
+
+```r
+# Core Shiny stack
+library(shiny)
+library(shinydashboard)
+
+# Data 
+library(readxl)
+
+# Visualisation
+library(ggplot2)
+library(plotly)
+library(DT)
+```
+
+---
+
+## Launching the Interactive Dashboard
+
+```r
+library(ConcreteImpactApp)
+run_app()
+```
+
+This opens the browser-based dashboard. No internet connection is required;
+all LCIA data are bundled within the package.
+
+---
+
+##
+
+The package also exposes its data-reading functions for scripted analyses,
+making the underlying data fully reproducible outside the Shiny interface.
+
+```{r load-pkg}
+library(ConcreteImpactApp)
+```
+
+### Fly Ash — Absolute LCIA Values
+
+```{r fa-lcia-abs}
+# Read absolute LCIA values for Fresh Ash, Electrostatic 12% LOI, with credit
+df_fa <- read_fa_lcia("FreshAsh_ET12", credited = TRUE)
+
+# Filter to 27.6 MPa concrete
+df_276 <- df_fa[abs(df_fa$Strength_MPa - 27.6) < 0.5, ]
+
+# Display
+knitr::kable(
+  df_276[, 1:6],
+  caption = "Absolute LCIA values — Fresh Ash ET 12%, 27.6 MPa (first 5 categories)",
+  digits  = 4
+)
+```
+
+### Fly Ash — Percent Change vs Baseline
+
+```{r fa-pct-data}
+# Read percent-change data (all strengths and replacement levels)
+df_pct <- read_fa_pct_full("FreshAsh_ET12", credited = TRUE)
+
+cat("Rows:", nrow(df_pct), "\n")
+cat("Compressive strengths (MPa):", paste(sort(unique(df_pct$str_num)), collapse=", "), "\n")
+cat("FA replacement levels (%):", paste(sort(unique(df_pct$FA_Pct)), collapse=", "), "\n")
+cat("Impact categories:", length(unique(df_pct$Impact_Category)), "\n")
+```
+
+### Fly Ash — Facet Plot (all strengths and replacements)
+
+```{r fa-pct-plot, fig.cap="Percent change in LCIA impact categories for Fresh Ash ET 12% scenario with avoided-impact credit. Bars represent fly ash replacement levels (20%, 30%, 40%) relative to the 0% Portland cement baseline. Green bars indicate environmental improvements; purple bars indicate increases.", fig.width=10, fig.height=7}
+df_pct$FA_Pct <- as.character(df_pct$FA_Pct)
+
+make_fa_pct_facet(
+  df           = df_pct,
+  title_txt    = "% Change vs Baseline — Fresh Ash | Electrostatic (ET) 12% LOI",
+  subtitle_txt = "With Avoided-Impact Credit | All Compressive Strengths | FA 20%, 30%, 40%"
+)
+```
+
+### Slag — Percent Change vs Baseline
+
+```{r slag-pct-plot, fig.cap="Percent change in LCIA impact categories for USA domestic slag (GGBFS) supply chain. Bars represent GGBFS replacement levels (30%, 40%, 50%) relative to the 0% Portland cement baseline.", fig.width=10, fig.height=7}
+df_slag <- read_slag_pct_full("USA")
+df_slag$GGBFS_Pct <- as.character(df_slag$GGBFS_Pct)
+
+make_slag_pct_facet(
+  df           = df_slag,
+  title_txt    = "% Change vs Baseline — Slag (GGBFS) | USA Domestic Supply Chain",
+  subtitle_txt = "All Compressive Strengths | GGBFS 30%, 40%, 50%"
+)
+```
+
+### Mix Design Reference Data
+
+```{r mix-design}
+# Fly ash mix designs
+# Access internal mix design data via package namespace
+FA_MIX <- ConcreteImpactApp:::FA_MIX
+
+fa_27 <- FA_MIX[abs(FA_MIX$strength - 27.6) < 0.5,
+                c("pct_fa", "cement", "fly_ash", "water")]
+fa_27$pct_fa <- paste0(fa_27$pct_fa, "%")
+
+knitr::kable(fa_27,
+  col.names = c("FA Replacement", "Cement (kg/m3)", "Fly Ash (kg/m3)", "Water (kg/m3)"),
+  caption   = "Fly ash concrete mix designs at 27.6 MPa (NRMCA 2021)",
+  row.names = FALSE
+)
+```
+
+---
+
+## Data Sources and Methodology
+
+See paper/Manuscript 
+
+### Impact Categories (TRACI 2.2)
+
+| Short Name              | Unit            |
+|-------------------------|-----------------|
+| Global Warming          | kg CO2 eq       |
+| Ozone Depletion         | kg CFC-11 eq    |
+| Smog                    | kg O3 eq        |
+| Acidification           | kg SO2 eq       |
+| Carcinogenics           | CTUh            |
+| Non-Carcinogenics       | CTUh            |
+| Respiratory Effects     | kg PM2.5 eq     |
+| Ecotoxicity             | CTUe            |
+| Freshwater Eutrophication | kg P eq       |
+| Marine Eutrophication   | kg N eq         |
+
+### Ash Processing Technologies
+
+- **Thermal (TT)**: Combustion-based reduction of Loss on Ignition (LOI)
+  at 6% and 12% carbon content
+- **Electrostatic (ET)**: Electrostatic separation of unburned carbon
+  particles at 6% and 12% LOI
+- **Chemical (CHEM)**: Non-ionic surfactant treatment at a commonly used
+  (Typical) dose and a Maximum dose
+
+### Fly Ash Source Types
+
+- **Fresh Ash**: Directly from a coal-fired power plant
+- **Landfill**: Recovered from dry landfill disposal
+- **Impoundment**: Recovered from wet ash pond (impoundment)
+
+---
+
+## Session Information
+
+```{r session-info}
+sessionInfo()
+```

@@ -1,0 +1,53 @@
+Package: ConcreteImpactApp
+Type: Package
+Title: Life Cycle Assessment Dashboard for Fly Ash and GGBFS Concrete (U.S. Ready-Mix Industry)
+Version: 1.0.0
+Date: 2025-03-16
+Authors@R: c(
+    person(
+      given   = "Philip",
+      family  = "Duah",
+      email   = "dpbxc@mst.edu",
+      role    = c("aut", "cre")
+    ),
+    person(
+      given   = "Kwame",
+      family  = "Awuah-Offei",
+      email = "kwamea@mst.edu",
+      role    = "aut"
+    )
+  )
+Description: An interactive Shiny application for evaluating the cradle-to-gate
+    life cycle environmental impacts of U.S. ready-mix concrete produced with fly
+    ash (FA) and ground granulated blast-furnace slag (GGBFS) as supplementary
+    cementitious materials (SCMs). The tool implements the TRACI 2.2 impact
+    assessment methodology across 10 environmental impact categories for six
+    compressive strength classes (17.2-55.2 MPa). Fly ash scenarios cover three
+    carbon-reduction treatment technologies (Thermal, Electrostatic, Chemical)
+    across three ash source types (Fresh Ash, Landfill, Impoundment). Slag
+    scenarios cover four supply-chain origins (USA, Brazil, China, Japan).
+    Developed by the Mine Sustainability Modeling Research Group at Missouri
+    University of Science and Technology.
+License: Apache License (>= 2)
+URL: https://github.com/Duah-Philip/ConcreteImpactApp
+BugReports: https://github.com/Duah-Philip/ConcreteImpactApp/issues
+Encoding: UTF-8
+LazyData: false
+RoxygenNote: 7.3.2
+VignetteBuilder: knitr
+Depends:
+    R (>= 4.1.0)
+Imports:
+    shiny (>= 1.7.4),
+    readxl (>= 1.4.2),
+    ggplot2 (>= 3.4.2)
+Suggests:
+    shinydashboard (>= 0.7.2),
+    DT (>= 0.27),
+    plotly (>= 4.10.2),
+    dplyr (>= 1.1.2),
+    scales (>= 1.2.1),
+    testthat (>= 3.0.0),
+    knitr (>= 1.42),
+    rmarkdown (>= 2.21),
+    covr
