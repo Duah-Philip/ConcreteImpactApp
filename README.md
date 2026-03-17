@@ -22,8 +22,8 @@ All results implement the **TRACI 2.2** impact assessment methodology across
 10 environmental impact categories for 6 compressive strength classes
 (17.2–55.2 MPa).
 
-Developed by the **Mine Sustainability Modeling Research Group**,
-Missouri University of Science and Technology.
+Developed by **Duah Philip and Kwame Awuah Offei** of the Mine Sustainability Modeling Research Group at Missouri University of Science and Technology. 
+This work was carried out as part of the NSF funded project ECO CBET: GOALI: CAS Climate—Expediting Decarbonization of the Cement Industry through Integration of CO₂ Capture and Conversion (NSF Project No. 2219086).
 
 ---
 
@@ -50,7 +50,7 @@ install.packages(
 ### From GitHub (development version)
 
 ```r
-# install.packages("remotes")
+# install.packages("remotes"), important if it has not been installed already
 remotes::install_github("Duah-Philip/ConcreteImpactApp")
 ```
 
@@ -123,7 +123,7 @@ ConcreteImpactApp/
 |─ ─inst/
 │   |─ ─ app/
 │   │    |─ ─ app.R            # Shiny application (UI + server)
-│   ├── extdata/             # Bundled LCIA source data (XLSX)
+│   |── extdata/             # Bundled LCIA source data (XLSX)
 │   │   |─ ─ Supporting__Information_5_fly_ash_concrete_credited.XLSX
 │   │   |─ ─ Supporting_Information_6_fly_ash_concrete_no_credit.XLSX
 │   │   |─ ─ Supporting__information_7_fly_ash_percent_change_credit.xlsx
@@ -166,7 +166,7 @@ citation("ConcreteImpactApp")
 
 ## License
 
-Copyright 2025 Mine Sustainability Modeling Research Group,
+Copyright 2025 Duah Philip,Mine Sustainability Modeling Research Group,
 Missouri University of Science and Technology.
 
 Licensed under the Apache License, Version 2.0. You may not use this

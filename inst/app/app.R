@@ -124,7 +124,7 @@ FA_PCT_SHEET_MAP <- c(
   "IMPMNT_CHEM_MAX"  = "MIX_FA_IMPMNT_CHEM_MAX_DOSE",
   "LFILL_CHEM_TYP"   = "MIX_FA_LFILL_CHEM_TYPICAL DOSE",
   "LFILL_CHEM_MAX"   = "MIX_FA_LFILL_CHEM_MAX_DOSE"
-)
+) 
 
 #  Mix design data 
 FA_MIX <- data.frame(
@@ -331,7 +331,7 @@ ui <- dashboardPage(skin="blue",
                                      tags$hr(),
                                      tags$div(style="padding:12px 18px;color:#aaa;font-size:11px;",
                                               tags$b("U.S. Ready-Mix Concrete"),tags$br(),"Life Cycle Assessment Tool",
-                                              tags$br(),tags$br(),"Contact & Correspondence:dpbxc@mst.edu",
+                                              tags$br(),tags$br(),"Contact & Correspondence:Duah Philip (dpbxc@mst.edu)",
                                               tags$br(),tags$br(),"Mine Sustainability Modeling Research Group (Chair: Professor Kwame Awuah-Offei) . Missouri University of Science & Technology"
                                      )
                     ),

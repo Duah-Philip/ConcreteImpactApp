@@ -28,7 +28,7 @@ Description: An interactive Shiny application for evaluating the cradle-to-gate
     scenarios cover four supply-chain origins (USA, Brazil, China, Japan).
     Developed by the Mine Sustainability Modeling Research Group at Missouri
     University of Science and Technology.
-License: Apache License (>= 2)
+License: Apache License (>= 2)| file LICENSE
 URL: https://github.com/Duah-Philip/ConcreteImpactApp
 BugReports: https://github.com/Duah-Philip/ConcreteImpactApp/issues
 Encoding: UTF-8
